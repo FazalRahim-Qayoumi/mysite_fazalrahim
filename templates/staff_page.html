@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block Staff %}
+
+<div class="container">
+     <div class="row">
+    <div class="col-1"></div>
+    <div class="col-1"></div>
+    <div class="col-10">
+      
+  <h2 class="mb-3 text-center">Staff Management</h2>
+
+  <!-- Controls -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Staff</button>
+
+    <form method="GET" class="d-flex" style="max-width: 300px;">
+      <input type="text" name="q" value="{{ query }}" class="form-control me-2" placeholder="Search...">
+      <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </form>
+
+    <div>
+      <a href="{% url 'download_staff_csv' %}" class="btn btn-success">CSV</a>
+      <a href="{% url 'download_staff_pdf' %}" class="btn btn-danger">PDF</a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table class="table table-bordered bg-white shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Principal</th>
+        <th>Vice Principal</th>
+        <th>School Secretary</th>
+        <th>Accountant</th>
+        <th>Subject Teacher</th>
+        <th>Librarian</th>
+        <th>IT Technician</th>
+        <th>Guard</th>
+        <th>Cleaner</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in staff_list %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ s.prancipal }}</td>
+        <td>{{ s.vice_prancipal }}</td>
+        <td>{{ s.School_secretary }}</td>
+        <td>{{ s.Accountant }}</td>
+        <td>
+    {% if s.Subject_teacher %}
+        {{ s.Subject_teacher.name }}
+    {% else %}
+        No Teacher
+    {% endif %}
+</td>
+        <td>{{ s.librarian }}</td>
+        <td>{{ s.IT_technation }}</td>
+        <td>{{ s.guard }}</td>
+        <td>{{ s.cleaner }}</td>
+        <td> 
+          <button class="btn btn-sm btn-warning " data-bs-toggle="modal" data-bs-target="#editModal{{ s.id }}">✏️</button>
+          <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ s.id }}">🗑️</button>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editModal{{ s.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="staff_id" value="{{ s.id }}">
+              <input type="hidden" name="edit_staff" value="1">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Staff</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="modal-body">
+                <div class="mb-3"><label>Name</label><input type="text" name="name" value="{{ teacher.name }}" class="form-control"></div>
+                <div class="mb-3"><label>Subject</label><input type="text" name="subject" value="{{ teacher.subject }}" class="form-control"></div>
+                <div class="mb-3"><label>Phone</label><input type="text" name="phone" value="{{ teacher.phone }}" class="form-control"></div>
+                <div class="mb-3"><label>Email</label><input type="email" name="email" value="{{ teacher.email }}" class="form-control"></div>
+              </div>
+                {{ form.as_p }}
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Modal -->
+      <div class="modal fade" id="deleteModal{{ s.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="staff_id" value="{{ s.id }}">
+              <input type="hidden" name="delete_staff" value="1">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Delete Staff</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete <b>{{ s.prancipal }}</b> and related staff record?
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+      <tr><td colspan="11" class="text-center text-muted">No staff records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="add_staff" value="1">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Staff</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {{ form.as_p }}
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock Staff %}

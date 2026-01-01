@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block student %}
+
+<div class="container">
+     <div class="row">
+    <div class="col-1"></div>
+    <div class="col-1"></div>
+    <div class="col-10">
+      
+  <h2 class="mb-3 text-center">Student Management</h2>
+
+  <!-- Controls -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Student</button>
+
+    <form method="GET" class="d-flex" style="max-width: 300px;">
+      <input type="text" name="q" value="{{ query }}" class="form-control me-2" placeholder="Search...">
+      <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </form>
+
+    <div>
+      <a href="{% url 'download_student_csv' %}" class="btn btn-success">CSV</a>
+      <a href="{% url 'download_student_pdf' %}" class="btn btn-danger">PDF</a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table class="table table-bordered bg-white shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Roll No</th>
+        <th>DOB</th>
+        <th>Gender</th>
+        <th>Class</th>
+        <th>Parent</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.roll_no }}</td>
+        <td>{{ student.date_of_birth }}</td>
+        <td>{{ student.get_gender_display }}</td>
+        <td>{{ student.student_class.name }}</td>
+        <td>{{ student.parent.name }}</td>
+       
+        <td>
+          <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ student.id }}">✏️</button>
+          <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ student.id }}">🗑️</button>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editModal{{ student.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="student_id" value="{{ student.id }}">
+              <input type="hidden" name="edit_student" value="1">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                {{ form.as_p }}
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">💾Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Modal -->
+      <div class="modal fade" id="deleteModal{{ student.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="student_id" value="{{ student.id }}">
+              <input type="hidden" name="delete_student" value="1">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Delete Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete <b>{{ student.name }}</b>?
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+      <tr><td colspan="8" class="text-center text-muted">No students found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="add_student" value="1">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Student</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {{ form.as_p }}
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">💾Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock student %}
+

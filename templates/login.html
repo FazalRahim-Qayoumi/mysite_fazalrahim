@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'C:\Users\Fazalrahim Qayoumi\Desktop\management  System\static\css\bootstrap.css' %}">
+</head>
+
+<body>
+    <h1 class="text-center h3 mb-3 fw-normal">Login page </h1>
+ <div class="container w-25 border mt-3">
+    
+<form action="" method="post">
+    {% csrf_token %}
+
+    
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" class="form-control"> <br>
+    
+    <label for="Password">Password</label>
+    <input type="password" name="password" id="Password" class="form-control"><br>
+
+    <input type="submit" value="Login" class="my-2 w-100 btn btn-lg btn-primary">
+</form>
+<a href="{% url "signup" %}" class="my-2 w-100 btn btn-lg btn-success"> Create Account</a>
+
+ </div>
+</body>
+</html>

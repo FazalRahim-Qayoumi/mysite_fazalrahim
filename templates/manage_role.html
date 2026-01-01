@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block roles %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Manage User Roles</h2>
+  <div class="card shadow p-4 rounded-3">
+    <form method="POST" class="row g-3">
+      {% csrf_token %}
+      <div class="col-md-6">
+        <label class="form-label fw-bold">Select User</label>
+        <select name="user_id" class="form-select" required>
+          {% for u in users %}
+            <option value="{{ u.id }}">{{ u.username }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-bold">Select Role</label>
+        <select name="role" class="form-select" required>
+          <option value="admin">Administrator</option>
+          <option value="teacher">Teacher</option>
+          <option value="accountant">Accountant</option>
+          <option value="student">Student</option>
+          <option value="parent">Parent</option>
+          <option value="staff">Staff Member</option>
+        </select>
+      </div>
+
+      <div class="col-12 text-center mt-4">
+        <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">
+          <i class="bi bi-save"></i> Save Role
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <hr class="my-4">
+
+  <h4 class="mb-3">Existing User Roles</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>User</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for role in roles %}
+        <tr>
+          <td>{{ role.user.username }}</td>
+          <td>{{ role.user.email }}</td>
+          <td class="fw-bold">{{ role.get_role_display }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+<div class="sidebar">
+  <h4 class="text-center mb-4">My Dashboard</h4>
+
+  <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+
+  {% if user.role == 'admin' or user.role == 'staff' %}
+    <a href="{% url 'Staff_page' %}">👥 Staffs</a>
+    <a href="{% url 'Class_page' %}">🏫 Class</a>
+    <a href="{% url 'parent_page' %}">👨‍👩‍👧 Parent</a>
+    <a href="{% url 'Attendance_page' %}">🗓 Attendance</a>
+    <a href="{% url 'Student_page' %}">🎓 Student</a>
+    <a href="{% url 'Subject_page' %}">📘 Subject</a>
+    <a href="{% url 'teacher_page' %}">👨‍🏫 Teacher</a>
+    <a href="{% url 'Marks_page' %}">📊 Marks</a>
+    <a href="{% url 'fees_list' %}">💰 Fees</a>
+  {% elif user.role == 'teacher' %}
+    <a href="{% url 'Student_page' %}">🎓 Students</a>
+    <a href="{% url 'Marks_page' %}">📊 Marks</a>
+    <a href="{% url 'Attendance_page' %}">🗓 Attendance</a>
+  {% elif user.role == 'student' %}
+    <a href="{% url 'Marks_page' %}">📊 My Marks</a>
+    <a href="{% url 'Attendance_page' %}">🗓 My Attendance</a>
+  {% endif %}
+
+  <div class="dropdown mt-3">
+    <button class="btn text-white dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+      ⚙️ Settings
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+      <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+{% comment %} {% extends "base.html" %} {% endcomment %}
+{% load static %}
+{% load i18n %}
+    <link rel="stylesheet" href="{% static 'C:\Users\Fazalrahim Qayoumi\Desktop\management  System\static\css\bootstrap.css' %}">
+
+{% comment %} {% block result_list %} {% endcomment %}
+  {{ block.super }}
+  {% if totals %}
+  <div class="results">
+    <table style="margin-top:15px;" class="table table-bordered">
+      <thead>
+        <tr style="background:#0d6efd;color:white;">
+          <th colspan="3" class="text-center">💰 Total Summary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="font-weight:bold;">
+          
+          <td>Total Fees: {{ totals.total_sum|default:0 }}</td>
+          <td>Paid Amount: {{ totals.paid_sum|default:0 }}</td>
+          <td>Balance Amount: {{ totals.balance_sum|default:0 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+{% comment %} {% endblock %} {% endcomment %}

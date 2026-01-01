@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block teacher %}
+{% load static %}
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Teacher Management</title>
+    <link rel="stylesheet" href="{% static 'C:\Users\Fazalrahim Qayoumi\Desktop\management  System\static\css\bootstrap.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .section { display: none; }  /* hide all sections by default */
+  </style>
+</head>
+<body class="p-5 bg-light">
+
+<div class="container">
+  <!-- Add Section -->
+   <style>
+    body {
+      background: #f8f9fa;
+      padding: 40px;
+    }
+    .btn {
+      border-radius: 8px;
+      padding: 10px 16px;
+    }
+    .btn i {
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4 bg-light"> {% endcomment %}
+
+
+
+<div class="container">
+   <div class="row">
+    <div class="col-1"></div>
+    <div class="col-1"></div>
+    <div class="col-10">
+  <h2 class="mb-4 text-center fw-bold">Teacher Management</h2>
+
+  <!-- Top Controls -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">➕Add Teacher</button>
+
+    <!-- Search -->
+    <form method="GET" class="d-flex" style="max-width: 300px;">
+      <input type="text" name="q" value="{{ query }}" class="form-control me-2" placeholder="Search...">
+      <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </form>
+
+    <div>
+      <a href="{% url 'download_csv' %}" class="btn btn-success">Download CSV</a>
+      <a href="{% url 'download_pdf' %}" class="btn btn-danger">Download PDF</a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table class="table table-bordered bg-white shadow-sm align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Subject</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for teacher in teachers %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ teacher.name }}</td>
+        <td>{{ teacher.subject }}</td>
+        <td>{{ teacher.phone }}</td>
+        <td>{{ teacher.email }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ teacher.id }}">✏️ </button>
+          <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ teacher.id }}">🗑️</button>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editModal{{ teacher.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="teacher_id" value="{{ teacher.id }}">
+              <input type="hidden" name="edit_teacher" value="1">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Teacher</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3"><label>Name</label><input type="text" name="name" value="{{ teacher.name }}" class="form-control"></div>
+                <div class="mb-3"><label>Subject</label><input type="text" name="subject" value="{{ teacher.subject }}" class="form-control"></div>
+                <div class="mb-3"><label>Phone</label><input type="text" name="phone" value="{{ teacher.phone }}" class="form-control"></div>
+                <div class="mb-3"><label>Email</label><input type="email" name="email" value="{{ teacher.email }}" class="form-control"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">💾Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Confirmation Modal -->
+      <div class="modal fade" id="deleteModal{{ teacher.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="teacher_id" value="{{ teacher.id }}">
+              <input type="hidden" name="delete_teacher" value="1">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete <strong>{{ teacher.name }}</strong>?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="text-center text-muted">No teachers found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="add_teacher" value="1">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Teacher</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {{ form.as_p }}
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">💾Save </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock teacher %}

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block subject %}
+
+
+<div class="container">
+     <div class="row">
+    <div class="col-1"></div>
+    <div class="col-1"></div>
+    <div class="col-10">
+      
+  <h2 class="mb-3 text-center">Subject Management</h2>
+
+  <!-- Controls -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Subject</button>
+
+    <form method="GET" class="d-flex" style="max-width: 300px;">
+      <input type="text" name="q" value="{{ query }}" class="form-control me-2" placeholder="Search...">
+      <button type="submit" class="btn btn-outline-secondary">Search</button>
+    </form>
+
+    <div>
+      <a href="{% url 'download_subject_csv' %}" class="btn btn-success">CSV</a>
+      <a href="{% url 'download_subject_pdf' %}" class="btn btn-danger">PDF</a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table class="table table-bordered bg-white shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Subject Name</th>
+        <th>Code</th>
+        <th>Teacher</th>
+        <th class='mx-4'>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subject in subjects %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ subject.name }}</td>
+        <td>{{ subject.code }}</td>
+        <td>{% if subject.teacher %}
+    {{ subject.teacher.name }}
+{% else %}
+    No Teacher
+{% endif %}</td>
+
+        <td class=''>
+          <button class="btn btn-sm btn-warning " data-bs-toggle="modal" data-bs-target="#editModal{{ subject.id }}">✏️</button>
+          <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ subject.id }}">🗑️</button>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      <div class="modal fade" id="editModal{{ subject.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="subject_id" value="{{ subject.id }}">
+              <input type="hidden" name="edit_subject" value="1">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Subject</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3"><label>Subject Name</label><input type="text" name="name" value="{{ subject.name }}" class="form-control"></div>
+                <div class="mb-3"><label>Code</label><input type="text" name="code" value="{{ subject.code }}" class="form-control"></div>
+                <div class="mb-3">
+                  <label>Teacher</label>
+                  <select name="teacher" class="form-control">
+                    <option value="">-- Select Teacher --</option>
+                    {% for teacher in subjects%}
+                    <option value="{{ teacher.id }}" {% if subject.teacher and teacher.id == subject.teacher.id %}selected{% endif %}>
+                      {{ teacher.name }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Modal -->
+      <div class="modal fade" id="deleteModal{{ subject.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="subject_id" value="{{ subject.id }}">
+              <input type="hidden" name="delete_subject" value="1">
+              <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Delete Subject</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete <b>{{ subject.name }}</b>?
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">No subjects found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="add_subject" value="1">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Subject</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {{ form.as_p }}
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+{% endblock subject %}

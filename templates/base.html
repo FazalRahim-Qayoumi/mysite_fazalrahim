@@ -1,0 +1,154 @@
+{% load static %}
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Management Dashboard</title>
+    <link rel="stylesheet" href="{% static 'C:\Users\Fazalrahim Qayoumi\Desktop\management  System\static\css\bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'C:\Users\Fazalrahim Qayoumi\Desktop\management  System\static\css\bootstrap-icons.min.css' %}">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"> {% endcomment %}
+
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      background-color: #003366;
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 12px 20px;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #0055a5;
+      border-radius: 8px;
+    }
+
+    .navbar {
+      background-color: #003366;
+      color: white;
+      margin-left: 240px;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 30px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-bar {
+      width: 250px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      .navbar {
+        margin-left: 0;
+      }
+      .content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+{% comment %} <div class="container">
+  <div class="row">
+    <div class="col-12"> {% endcomment %}
+
+  
+  <!-- Sidebar -->
+   
+
+
+
+
+
+
+  <div class="sidebar p-3">
+    <h4 class="text-center  mb-4"><img class='d-inline' width=60px height=40px  src="{% static "C:\Users\Fazalrahim Qayoumi\Desktop\management  System\static\images\file_00000000e734620a9b9152c2a083344d.png" %}" alt="dashboard"></h4>
+    <a href="{% url "dashboard" %}"> 🏠Dashboard</a>
+    <a href="{% url "teacher_page" %}"></i> 🧑Teachers</a>
+    <a href="{% url "Student_page" %}"> 🧍Students</a>
+    <a href="{% url "Subject_page" %}">📚Subject</a>
+    <a href="{% url "Class_page" %}"> 🏫Classes</a>
+    <a href="{% url "Attendance_page" %}"></i> ✅Attendance</a>
+    <a href="{% url "Attendance_page" %}">👤parent</a>
+    <a href="{% url "Marks_page" %}"> 📆Marks</a>
+    <a href="{% url "fees_list" %}">💰 Fees</a>
+    <a href="{% url "Staff_page" %}">🧑Staff</a>
+    <a href="#"></i>⚙️ Settings</a>
+    <a href="{% url "logout" %}"></i> 🚪Logout</a>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark px-4">
+    <div class="container-fluid">
+      <h5 class="text-white mb-0">Dashboard</h5>
+      <form class="d-flex ms-auto" role="search">
+        <input class="form-control me-2 search-bar" type="search" placeholder="Search..."  aria-label="Search">
+        <button class="btn btn-light" type="submit"></i> Search</button>
+      </form>
+    </div>
+  </nav>
+
+ 
+
+  
+{% block fee %}{% endblock fee %}
+
+{% block Class %}  {% endblock %}
+{% block Attendance %}{% endblock Attendance %}
+{% block dashboard %}{% endblock  %}
+{% block fees %}{% endblock fees %}
+{% block mark %}{% endblock mark %}
+{% block parent %}{% endblock parent %}
+{% block Profile %}{% endblock Profile %}
+{% block Staff %}{% endblock Staff %}
+{% block student %}{% endblock student %}
+{% block subject %}{% endblock subject %}
+{% block teacher %}{% endblock teacher %}
+{% block content %}{% endblock content %}
+{% block result_list %} {% endblock %}
+{% block rolse %}{% endblock rolse %}
+
+
+
+
+<script src="{% static "C:\Users\Fazalrahim Qayoumi\Desktop\management  System\static\js\bootstrap.bundle.js" %}"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  </div>
+  </div>
+</div>
+
+</body>
+</html>
